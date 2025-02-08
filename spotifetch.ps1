@@ -1,5 +1,7 @@
 $OutputEncoding = [Console]::InputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding
 
+$spotifetchPath = (Split-Path -Parent $PSCommandPath)
+
 $apiURL = "https://api.spotify.com/v1"
 
 $clientId =     $null 
@@ -155,7 +157,7 @@ function GetToken($authcode, $mode)
   if ($mode -eq 'auth')
   {
     $refreshToken = $response.refresh_token
-    Write-Output $refreshToken | Out-File .refresh
+    Write-Output $refreshToken | Out-File "$spotifetchPath\.refresh"
   }
   return $response.access_token
 }
@@ -297,7 +299,7 @@ function main()
 {
   try
   {
-    .\setup.ps1
+    Invoke-Expression "$spotifetchPath\setup.ps1"
     $clientId =     [System.Environment]::GetEnvironmentVariable('SPOTIFY_CLIENT_ID')
     $clientSecret = [System.Environment]::GetEnvironmentVariable("SPOTIFY_CLIENT_SECRET")
     $refreshToken = [System.Environment]::GetEnvironmentVariable("SPOTIFY_REFRESH_TOKEN")
@@ -318,10 +320,10 @@ function main()
     $stats.Followers = $usrInfo.Followers
 
     $stats.TopSong = (GetTopTracks $token "short_term" 1)[0]
-    $stats.TopSongsYear = GetTopTracks $token "long_term"
+    $stats.TopSongsYear = GetTopTracks $token "medium_term"
 
     $stats.TopArtist = (GetTopArtists $token "short_term" 1)[0].name
-    $stats.TopArtistsYear = (GetTopArtists $token "long_term")
+    $stats.TopArtistsYear = (GetTopArtists $token "medium_term")
 
     while ($true) {
       $playback = GetPlayback $token $usrInfo.Country
