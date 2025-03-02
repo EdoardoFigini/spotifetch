@@ -21,7 +21,7 @@ Create a `config.json` file and place in `spotifetch` folder.
 To get `client_id` and `client_secret` you should create a new application in the [Spotify Developer Page](https://developer.spotify.com/).
 
 In the settings for your application you must specify a redirect uri (e.g. `http://localhost:12001/callback`).
-In your config folder you should set `redirect_url` to the same value except for `/callback`. (e.g. `http://localhost:12001`).
+In your config file you should set `redirect_url` to the same value except for `/callback`. (e.g. `"redirect_url": "http://localhost:12001"`).
 It is important that the redirect url points to localhost, as the script will automatically set up a listener that handles Spotify's OAuth 2.0.
 
 To launch use
